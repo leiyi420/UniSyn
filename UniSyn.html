@@ -1,0 +1,685 @@
+<!DOCTYPE hvtml>
+<!-- saved from url=(0041)https://leiyi420.github.io/UniSyn/ -->
+<html lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+<title>UniSyn: An end-to-end unified model for text-to-speech and singing voice synthesis</title>
+<meta name="generator" content="Jekyll v3.9.0">
+<meta property="og:title" content="TODO: title">
+<meta property="og:locale" content="en_US">
+<link rel="canonical" href="https://leiyi420.github.io/UniSyn/">
+<meta property="og:url" content="https://leiyi420.github.io/UniSyn/">
+<meta name="twitter:card" content="summary">
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link rel="stylesheet" href="./UniSyn_files/style.css">
+  </head>
+  <body data-new-gr-c-s-check-loaded="14.1001.0" data-gr-ext-installed="">
+    <section class="page-header">
+    <!-- <h1 class="project-name">Demo PAGE</h1> -->
+    <!-- <h2 class="project-tagline"></h2> -->
+      
+      
+    </section>
+
+<section class="main-content">
+    <h1 id=""><center>UniSyn: An End-to-End Unified Model for Text-to-Speech and Singing Voice Synthesis</center></h1>
+
+    <center> Yi Lei<sup>1</sup>, Shan Yang<sup>2</sup>, Xinsheng Wang<sup>1</sup>, Qicong Xie<sup>1</sup>, Jixun Yao<sup>1</sup>, Lei Xie<sup>1</sup>, Dan Su<sup>2</sup> </center>
+    <center> <sup>1</sup> Audio, Speech and Language Processing Group (ASLP@NPU), School of Computer Science, Northwestern Polytechnical University, Xi'an, China</center>
+    <center> <sup>2</sup> Tencent AI Lab, China</center>
+
+<h2>Contents</h2>
+<ul>
+  <li><a href="https://leiyi420.github.io/UniSyn/#abstract">Abstract</a></li>
+  <li><a href="https://leiyi420.github.io/UniSyn/#visual">Examples of training data</a></li>
+  <li><a href="https://leiyi420.github.io/UniSyn/#tts">Demos - Synthetic samples display</a></li>
+  <li><a href="https://leiyi420.github.io/UniSyn/#vc">Demos -- TTS of unified modeling for speakers and singers</a></li>
+    <ul>
+        <li><a href="https://leiyi420.github.io/UniSyn/#3.1">TTS of singers, who only have singing training data</a></li>
+        <li><a href="https://leiyi420.github.io/UniSyn/#3.2">TTS of speakers</a></li>
+    </ul>
+  <li><a href="https://leiyi420.github.io/UniSyn/#vc">Demos -- SVS in unified modeling for speakers and singers</a></li>
+    <ul>
+        <li><a href="https://leiyi420.github.io/UniSyn/#3.1">SVS of speakers, who only have speech training data</a></li>
+        <li><a href="https://leiyi420.github.io/UniSyn/#3.2">SVS of singers</a></li>
+    </ul>
+  <li><a href="https://leiyi420.github.io/UniSyn/#vc">Demos -- Ablation studies</a></li>
+</ul>
+
+<h2 id="abstract">1. Abstract<a name="abstract"></a></h2>
+<p>Text-to-speech (TTS) and singing voice synthesis (SVS) aim at generating high-quality speaking and singing voice according to textual input and music scores, respectively. Unifying TTS and SVS into a single system is crucial to the applications requiring both of them. Existing methods usually suffer from some limitations, which rely on either both singing and speaking data from the same person or cascaded models of multiple tasks. To address these problems, a simplified elegant framework for TTS and SVS, named UniSyn, is proposed in this paper. It is an end-to-end unified model that can make a voice speak and sing with only singing or speaking data from this person. To be specific, a multi-conditional variational autoencoder (MC-VAE), which constructs two independent latent sub-spaces with the speaker- and style-related (i.e. speak or sing) conditions for flexible control, is proposed in UniSyn. Moreover, supervised guided-VAE and timbre perturbation with the Wasserstein distance constraint are adopted to further disentangle the speaker timbre and style. Experiments conducted on two speakers and two singers demonstrate that UniSyn can generate natural speaking and singing voice without corresponding training data. The proposed approach outperforms the state-of-the-art end-to-end voice generation work, which proves the effectiveness and advantages of UniSyn.</p>
+<br>
+	<center><img src="./UniSyn_files/architecture.jpg"></center>
+<br><br>
+
+<h2>1. Examples of training data<a name="visual"></a></h2>
+<blockquote>
+<ul>
+	A singing corpus and a speech corpus are involved to train UniSyn. The singing corpus contains two singers, denoted as 'Singer-1' and 'Singer-2',  with only singing data. The speech corpus contains two speakers, denoted as 'Speaker-1' and 'Speaker-2', with only speech recordings. Here, we list a few examples from the training corpora to provide the target speaker/singer timbre for listeners.
+<li><b>Singer-1/Singer-2</b>: Singers with only singing training data</li>
+<li><b>Speaker-1/Speaker-2</b>: Speakers with only speech training data</li>
+</ul>
+</blockquote>
+
+<br>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Target Timbre</th>
+      <th style="text-align: center" colspan="3">Ground-truth speech recording</th>
+      <th style="text-align: center" colspan="3">Ground-truth singing recording</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><strong>Singer-1</strong></td>
+      <td style="text-align: center"> \ </td>
+      <td style="text-align: center"> \ </td>
+      <td style="text-align: center"> \ </td>
+      <td style="text-align: left"><audio style="width: 100px;" src="samples/gt/singer1-1.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio style="width: 100px;" src="samples/gt/singer1-2.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio style="width: 100px;" src="samples/gt/singer1-3.wav" controls="" preload=""></audio></td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><strong>Singer-2</strong></td>
+      <td style="text-align: center"> \ </td>
+      <td style="text-align: center"> \ </td>
+      <td style="text-align: center"> \ </td>
+      <td style="text-align: left"><audio style="width: 100px;" src="samples/gt/singer2-1.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio style="width: 100px;" src="samples/gt/singer2-2.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left"><audio style="width: 100px;" src="samples/gt/singer2-3.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+      <td style="text-align: center"><strong>Speaker-1</strong></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/gt/speaker1-1.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/gt/speaker1-2.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/gt/speaker1-3.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: center"> \ </td>
+	  <td style="text-align: center"> \ </td>
+	  <td style="text-align: center"> \ </td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><strong>Speaker-2</strong></td>
+      <td style="text-align: left"><audio style="width: 100px;" src="samples/gt/speaker2-1.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/gt/speaker2-2.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/gt/speaker2-3.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: center"> \ </td>
+	  <td style="text-align: center"> \ </td>
+	  <td style="text-align: center"> \ </td>
+    </tr>
+
+  </tbody>
+</table>
+
+
+<br><br>
+
+<h2>2. Demos - Synthetic samples display<a name="long"></a></h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Target Timbre</th>
+      <th style="text-align: center">Ground-truth recording</th>
+      <th style="text-align: center" colspan="2">TTS</th>
+      <th style="text-align: center" colspan="2">SVS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><strong>Singer-1</strong></td>
+      <td style="text-align: left"><audio style="width: 140px;" src="samples/gt/singer1-2.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/db1_long_21.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/db2_long_4_21.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/opencpop_2086_long_20.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/opencpop_2044_long_1_20.wav" controls="" preload=""></audio></td>
+	</tr>
+    <tr>
+      <td style="text-align: center"><strong>Singer-2</strong></td>
+      <td style="text-align: left"><audio style="width: 140px;" src="samples/gt/singer2-1.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/db1_long_31.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/db2_long_4_31.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/opencpop_2086_long_30.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/opencpop_2044_long_1_30.wav" controls="" preload=""></audio></td>
+	</tr>
+	<tr>
+      <td style="text-align: center"><strong>Speaker-1</strong></td>
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/gt/speaker1-1.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/db1_long_11.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/db2_long_4_11.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/opencpop_2086_long_10.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/opencpop_2044_long_1_10.wav" controls="" preload=""></audio></td>
+	</tr>
+    <tr>
+      <td style="text-align: center"><strong>Speaker-2</strong></td>
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/gt/speaker2-1.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/db1_long_01.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/db2_long_4_01.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/opencpop_2086_long_00.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/long_samples/opencpop_2044_long_1_00.wav" controls="" preload=""></audio></td>
+	</tr>
+
+  </tbody>
+</table>
+<br><br>
+
+<h2>3. Demos -- TTS of unified modeling for speakers and singers.<a name="tts"></a></h2>
+<p><b>We compare the synthetic speaking voices of target speakers and singers from different systems.</b></p>
+<blockquote>
+Compared models:
+<ul>
+<li>VITS-tts[1]: VITS system only trained with the speech data treating TTS as the only task.</li>
+<li>VITS-unify: the unified model constructed on VITS using the flow-decoder for generating speaking and singing voice.</li>
+<li>UniSyn-tts: the proposed system only trained on the speech data for TTS.</li>
+<li>UniSyn-unify (Proposed): the proposed unified model for both TTS and SVS.</li>
+
+</ul>
+</blockquote>
+<br>
+
+<a name="3.1"><h3>3.1 Synthetic speaking voices of singers, who only have singing training data.</h3></a>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Target spekaer</th>
+      <th style="text-align: center">Groung-truth timbre</th>
+      <th style="text-align: center">VITS-tts</th>
+      <th style="text-align: center">VITS-unify</th>
+      <th style="text-align: center">UniSyn-tts</th>
+      <th style="text-align: center">UniSyn-unify (proposed)</th>
+    </tr>
+  </thead>
+  <tbody>
+	<tr>
+      <td style="text-align: center" rowspan="4"><strong>Singer-1</strong></td>
+      <td style="text-align: left" rowspan="4"><audio style="width: 140px;" src="samples/gt/singer1-2.wav" controls="" preload=""></audio></td>
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/mydb1_003185_21.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/mydb1_003185_21.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/db2_005774_21.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/db2_005774_21.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/mydb1_003952_21.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/mydb1_003952_21.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/mydb1_005698_21.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/mydb1_005698_21.wav" controls="" preload=""></audio></td>
+	</tr>
+
+    <tr>
+      <td style="text-align: center" rowspan="4"><strong>Singer-2</strong></td>
+      <td style="text-align: left" rowspan="4"><audio style="width: 140px;" src="samples/gt/Singer2-1.wav" controls="" preload=""></audio></td>
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/mydb1_003185_31.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/mydb1_003185_31.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/db2_005774_31.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/db2_005774_31.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/mydb1_003952_31.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/mydb1_003952_31.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/mydb1_005698_31.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/mydb1_005698_31.wav" controls="" preload=""></audio></td>
+	</tr>
+
+  </tbody>
+</table>
+<p><b>Short summary:</b> The synthetic speech voices show the superiority of the proposed method in producing synthetic speaking voice of the target singer without speech training data.</p>
+<br>
+
+<a name="3.2"><h3>3.2 Synthetic speaking voices of speakers.</h3></a>
+<br>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Target spekaer</th>
+      <th style="text-align: center">Groung-truth timbre</th>
+      <th style="text-align: center">VITS-tts</th>
+      <th style="text-align: center">VITS-unify</th>
+      <th style="text-align: center">UniSyn-tts</th>
+      <th style="text-align: center">UniSyn-unify (proposed)</th>
+    </tr>
+  </thead>
+  <tbody>
+	<tr>
+      <td style="text-align: center" rowspan="4"><strong>Speaker-1</strong></td>
+      <td style="text-align: left" rowspan="4"><audio style="width: 140px;" src="samples/gt/speaker1-1.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-tts/mydb1_003185_11.wav" controls="" preload=""></audio></td>   
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/mydb1_003185_11.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/unisyn-tts/mydb1_003185_11.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/mydb1_003185_11.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-tts/db2_005774_11.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/db2_005774_11.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/unisyn-tts/db2_005774_11.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/db2_005774_11.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-tts/mydb1_003952_11.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/mydb1_003952_11.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/unisyn-tts/mydb1_003952_11.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/mydb1_003952_11.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-tts/mydb1_005698_11.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/mydb1_005698_11.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/unisyn-tts/mydb1_005698_11.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/mydb1_005698_11.wav" controls="" preload=""></audio></td>
+	</tr>
+
+    <tr>
+      <td style="text-align: center" rowspan="4"><strong>Speaker-2</strong></td>
+      <td style="text-align: left" rowspan="4"><audio style="width: 140px;" src="samples/gt/speaker2-2.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-tts/mydb1_003185_01.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/mydb1_003185_01.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/unisyn-tts/mydb1_003185_01.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/mydb1_003185_01.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-tts/db2_005774_01.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/db2_005774_01.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/unisyn-tts/db2_005774_01.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/db2_005774_01.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-tts/mydb1_003952_01.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/mydb1_003952_01.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/unisyn-tts/mydb1_003952_01.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/mydb1_003952_01.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-tts/mydb1_005698_01.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/mydb1_005698_01.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/unisyn-tts/mydb1_005698_01.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/proposed/mydb1_005698_01.wav" controls="" preload=""></audio></td>
+	</tr>
+
+  </tbody>
+</table>
+
+<p><b>Short summary:</b> The results demonstrate that the proposed UniSyn with interpretable latent distribution has the equivalent ability in speech generation with VITS.</p>
+<br>
+
+<h2>4. Demos -- SVS in unified modeling for speakers and singers.<a name="svs"></a></h2>
+
+<p><b>We compare the synthetic singing voices of target speakers and singers from different systems.</b></p>
+<blockquote>
+Compared models:
+<ul>
+<li>Learn2Sing[2]: system to teach speakers to sing with a HiFi-GAN vocoder to synthesize audio from mel-spectrogram.</li>
+<li>VITS-svs: VITS system only trained with the singing data treat SVS as the only task.</li>
+<li>VITS-unify: the unified model constructed on VITS using the flow-decoder for generating speaking and singing voice.</li>
+<li>UniSyn-svs: the proposed system only trained on the singing data for SVS.</li>
+<li>UniSyn-unify (Proposed): the proposed unified model for both TTS and SVS.</li>
+
+</ul>
+</blockquote>
+<br>
+
+<a name="4.1"><h3>4.1 Synthetic singing voices of speakers, who only have speaking training data.</h3></a>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Target spekaer</th>
+      <th style="text-align: center">Groung-truth timbre</th>
+      <th style="text-align: center">Learn2Sing</th>
+      <th style="text-align: center">VITS-svs</th>
+      <th style="text-align: center">VITS-unify</th>
+      <th style="text-align: center">UniSyn-svs</th>
+      <th style="text-align: center">UniSyn-unify (proposed)</th>
+    </tr>
+  </thead>
+  <tbody>
+	<tr>
+      <td style="text-align: center" rowspan="4"><strong>Speaker-1</strong></td>
+      <td style="text-align: left" rowspan="4"><audio style="width: 100px;" src="samples/gt/speaker1-2.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_006_0_10.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_006_0_10.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_006_0_10.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_078_19_10.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_078_19_10.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_078_19_10.wav" controls="" preload=""></audio></td>
+    </tr>
+    <tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_006_13_10.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: center"> \ </td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_006_13_10.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_006_13_10.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_078_21_10.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: center"> \ </td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_078_21_10.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_078_21_10.wav" controls="" preload=""></audio></td>
+	</tr>
+
+    <tr>
+      <td style="text-align: center" rowspan="4"><strong>Speaker-2</strong></td>
+      <td style="text-align: left" rowspan="4"><audio style="width: 100px;" src="samples/gt/speaker2-2.wav" controls="" preload=""></audio></td>
+
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_006_0_00.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_006_0_00.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_006_0_00.wav" controls="" preload=""></audio></td>
+    </tr>
+	
+	<tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_078_19_00.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_078_19_00.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_078_19_00.wav" controls="" preload=""></audio></td>
+    </tr>
+    <tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_006_13_00.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_006_13_00.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_006_13_00.wav" controls="" preload=""></audio></td>
+    </tr>
+    <tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_078_21_00.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_078_21_00.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: center"> \ </td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_078_21_00.wav" controls="" preload=""></audio></td>
+    </tr>
+
+  </tbody>
+</table>
+<p><b>Short summary:</b> The results demonstrate the effectiveness of the proposed model in generating natural singing voices of speakers, who don't have singing training data, with preserving the target timbre.>
+<br>
+
+<a name="4.2"><h3>4.2 Synthetic singing voices of singers.</h3></a>
+
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Target spekaer</th>
+      <th style="text-align: center">Groung-truth timbre</th>
+      <th style="text-align: center">Learn2Sing</th>
+      <th style="text-align: center">VITS-Sing</th>
+      <th style="text-align: center">VITS-unify</th>
+      <th style="text-align: center">UniSyn-Sing</th>
+      <th style="text-align: center">UniSyn-unify (proposed)</th>
+    </tr>
+  </thead>
+  <tbody>
+	<tr>
+      <td style="text-align: center" rowspan="4"><strong>Singer-1</strong></td>
+      <td style="text-align: left" rowspan="4"><audio style="width: 100px;" src="samples/gt/singer1-2.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_006_0_20.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-sing/singer_sing_006_0_00.wav" controls="" preload=""></audio></td>  
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_006_0_20.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/unisyn-sing/singer_sing_006_0_00.wav" controls="" preload=""></audio></td>  
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_006_0_20.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_006_13_20.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-sing/singer_sing_006_13_00.wav" controls="" preload=""></audio></td>  
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_006_13_20.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/unisyn-sing/singer_sing_006_13_00.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_006_13_20.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_078_19_20.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-sing/singer_sing_078_19_00.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_078_19_20.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/unisyn-sing/singer_sing_078_19_00.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_078_19_20.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_078_21_20.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-sing/singer_sing_078_21_00.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_078_21_20.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/unisyn-sing/singer_sing_078_21_00.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_078_21_20.wav" controls="" preload=""></audio></td>
+	</tr>
+
+    <tr>
+      <td style="text-align: center" rowspan="4"><strong>Singer-2</strong></td>
+      <td style="text-align: left" rowspan="4"><audio style="width: 100px;" src="samples/gt/singer2-2.wav" controls="" preload=""></audio></td>
+
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_006_0_30.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-sing/singer_sing_006_0_10.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_006_0_30.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/unisyn-sing/singer_sing_006_0_10.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_006_0_30.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_006_13_30.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-sing/singer_sing_006_13_10.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_006_13_30.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/unisyn-sing/singer_sing_006_13_10.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_006_13_30.wav" controls="" preload=""></audio></td>
+    </tr>
+	<tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_078_19_30.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-sing/singer_sing_078_19_10.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_078_19_30.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/unisyn-sing/singer_sing_078_19_10.wav" controls="" preload=""></audio></td> 
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_078_19_30.wav" controls="" preload=""></audio></td>
+    </tr>
+    <tr>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/learn2sing/singer_sing_078_21_30.wav" controls="" preload=""></audio></td>  
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-sing/singer_sing_078_21_10.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/vits-unify/singer_sing_078_21_30.wav" controls="" preload=""></audio></td> 
+      <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/unisyn-sing/singer_sing_078_21_10.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/svs/proposed/singer_sing_078_21_30.wav" controls="" preload=""></audio></td>
+    </tr>
+
+  </tbody>
+</table>
+
+<p><b>Short summary:</b> The proposed model can achieve a similar performance with the SOTA voice generation system VITS on generating natural singing voices of singers.</p>
+<br>
+
+
+
+
+<h2>5. Demos -- Ablation studies<a name="Ablation"></a></h2>
+
+<p><b>We conduct ablation studies to evaluate the proposed components in UniSyn, where ``-pert" and ``-GVAE" denote removing speaker timbre perturbation and supervised guided-VAE from the proposed method respectively.</b></p>
+
+<br>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Target Timbre</th>
+      <th style="text-align: center">Ground-truth recording</th>
+      <th style="text-align: center" colspan="2">UniSyn-unify (proposed)</th>
+      <th style="text-align: center" colspan="2">-pert</th>
+      <th style="text-align: center" colspan="2">-GVAE</th>
+      <th style="text-align: center" colspan="2">-pert -GVAE</th>
+    </tr>
+  </thead>
+  <tbody>
+  	    <tr>
+      <td style="text-align: center" rowspan="1"><strong>TTS: Singer-1</strong></td>
+      <td style="text-align: left" rowspan="2"><audio style="width: 100px;" src="samples/gt/singer1-2.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/db2_005774_21.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/db2_003179_21.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/db2_005774_21.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/db2_003179_21.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/db2_005774_21.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/db2_003179_21.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/db2_005774_21.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/db2_003179_21.wav" controls="" preload=""></audio></td>   
+	</tr>
+
+    <tr>
+      <td style="text-align: center" rowspan="1"><strong>SVS: Singer-1</strong></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/singer_sing_006_0_20.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/singer_sing_006_3_20.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/singer_sing_006_0_20.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/singer_sing_006_3_20.wav" controls="" preload=""></audio></td>
+	  
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/singer_sing_006_0_20.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/singer_sing_006_3_20.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/singer_sing_006_0_20.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/singer_sing_006_3_20.wav" controls="" preload=""></audio></td> 
+	</tr>
+    
+    <tr>
+      <td style="text-align: center" rowspan="1"><strong>TTS: Singer-2</strong></td>
+      <td style="text-align: left" rowspan="2"><audio style="width: 100px;" src="samples/gt/singer2-1.wav" controls="" preload=""></audio></td>
+    
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/db2_005774_31.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/db2_003179_31.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/db2_005774_31.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/db2_003179_31.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/db2_005774_31.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/db2_003179_31.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/db2_005774_31.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/db2_003179_31.wav" controls="" preload=""></audio></td>
+	</tr>
+
+    <tr>
+      <td style="text-align: center" rowspan="1"><strong>SVS: Singer-2</strong></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/singer_sing_006_0_30.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/singer_sing_006_3_30.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/singer_sing_006_0_30.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/singer_sing_006_3_30.wav" controls="" preload=""></audio></td>
+	  
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/singer_sing_006_0_30.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/singer_sing_006_3_30.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/singer_sing_006_0_30.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/singer_sing_006_3_30.wav" controls="" preload=""></audio></td> 
+	</tr>
+
+	<tr>
+      <td style="text-align: center" rowspan="1"><strong>TTS: Speaker-1</strong></td>
+      <td style="text-align: left" rowspan="2"><audio style="width: 100px;" src="samples/gt/speaker1-2.wav" controls="" preload=""></audio></td>
+    
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/db2_005774_11.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/db2_003179_11.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/db2_005774_11.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/db2_003179_11.wav" controls="" preload=""></audio></td>
+	  
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/db2_005774_11.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/db2_003179_11.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/db2_005774_11.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/db2_003179_11.wav" controls="" preload=""></audio></td>  	
+    </tr>
+
+    <tr>
+      <td style="text-align: center" rowspan="1"><strong>SVS: Speaker-1</strong></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/singer_sing_006_0_10.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/singer_sing_006_3_10.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/singer_sing_006_0_10.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/singer_sing_006_3_10.wav" controls="" preload=""></audio></td>
+	  
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/singer_sing_006_0_10.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/singer_sing_006_3_10.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/singer_sing_006_0_10.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/singer_sing_006_3_10.wav" controls="" preload=""></audio></td>  
+	</tr>
+
+	<tr>
+      <td style="text-align: center" rowspan="1"><strong>TTS: Speaker-2</strong></td>
+      <td style="text-align: left" rowspan="2"><audio style="width: 100px;" src="samples/gt/speaker2-2.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/db2_005774_01.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/db2_003179_01.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/db2_005774_01.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/db2_003179_01.wav" controls="" preload=""></audio></td>
+	  
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/db2_005774_01.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/db2_003179_01.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/db2_005774_01.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/db2_003179_01.wav" controls="" preload=""></audio></td>
+	</tr>
+
+    <tr>
+      <td style="text-align: center" rowspan="1"><strong>SVS: Speaker-2</strong></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/singer_sing_006_0_00.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/proposed/singer_sing_006_3_00.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/singer_sing_006_0_00.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert/singer_sing_006_3_00.wav" controls="" preload=""></audio></td>
+	  
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/singer_sing_006_0_00.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-gvae/singer_sing_006_3_00.wav" controls="" preload=""></audio></td>
+	  
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/singer_sing_006_0_00.wav" controls="" preload=""></audio></td>
+	  <td style="text-align: left" ><audio style="width: 100px;" src="samples/ablation/-pert-gvae/singer_sing_006_3_00.wav" controls="" preload=""></audio></td> 
+    </tr>
+    
+
+  </tbody>
+</table>
+
+
+
+<p><b>Short summary:</b> The results of ablation studies indicate that removing the two strategies leads to different degrees of performance degradation. To be specific, removing speaker timbre perturbation noticeably leads to different degree of degradation on speaker similarity for TTS and SVS. We also find that GVAE is more important to the naturalness of the TTS task although it is necessary for both tasks and metrics.</p>
+
+
+<br><br><br>
+
+<p><b>References</b></p>
+<p>[1] Kim, J.; Kong, J.; and Son, J. 2021. Conditional variational autoencoder with adversarial learning for end-to-end text-to-speech. In Proceedings of International Conference on Machine Learning, 5530–5540. PMLR.</p>
+<p>[2] Xue, H.; Wang, X.; Zhang, Y.; Xie, L.; Zhu, P.; and Bi, M. 2022. Learn2Sing 2.0: Diffusion and Mutual Information-Based Target Speaker SVS by Learning from Singing Teacher. In Proc. Interspeech 2022, 4267–4271.</p>
+
+
+
+      <footer class="site-footer">
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com/">GitHub Pages</a>.</span>
+      </footer>
+    </section>
+
+</body></html>
