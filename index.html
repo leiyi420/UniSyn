@@ -33,19 +33,19 @@
 <h2>Contents</h2>
 <ul>
   <li><a href="https://leiyi420.github.io/UniSyn/#abstract">Abstract</a></li>
-  <li><a href="https://leiyi420.github.io/UniSyn/#visual">Examples of training data</a></li>
-  <li><a href="https://leiyi420.github.io/UniSyn/#tts">Demos - Synthetic samples display</a></li>
-  <li><a href="https://leiyi420.github.io/UniSyn/#vc">Demos -- TTS of unified modeling for speakers and singers</a></li>
+  <li><a href="https://leiyi420.github.io/UniSyn/#data">Examples of training data</a></li>
+  <li><a href="https://leiyi420.github.io/UniSyn/#display">Demos - Synthetic samples display</a></li>
+  <li><a href="https://leiyi420.github.io/UniSyn/#tts">Demos -- TTS of unified modeling for speakers and singers</a></li>
     <ul>
         <li><a href="https://leiyi420.github.io/UniSyn/#3.1">TTS of singers, who only have singing training data</a></li>
         <li><a href="https://leiyi420.github.io/UniSyn/#3.2">TTS of speakers</a></li>
     </ul>
-  <li><a href="https://leiyi420.github.io/UniSyn/#vc">Demos -- SVS in unified modeling for speakers and singers</a></li>
+  <li><a href="https://leiyi420.github.io/UniSyn/#svs">Demos -- SVS in unified modeling for speakers and singers</a></li>
     <ul>
-        <li><a href="https://leiyi420.github.io/UniSyn/#3.1">SVS of speakers, who only have speech training data</a></li>
-        <li><a href="https://leiyi420.github.io/UniSyn/#3.2">SVS of singers</a></li>
+        <li><a href="https://leiyi420.github.io/UniSyn/#4.1">SVS of speakers, who only have speech training data</a></li>
+        <li><a href="https://leiyi420.github.io/UniSyn/#4.2">SVS of singers</a></li>
     </ul>
-  <li><a href="https://leiyi420.github.io/UniSyn/#vc">Demos -- Ablation studies</a></li>
+  <li><a href="https://leiyi420.github.io/UniSyn/#ablation">Demos -- Ablation studies</a></li>
 </ul>
 
 <h2 id="abstract">1. Abstract<a name="abstract"></a></h2>
@@ -54,7 +54,7 @@
 	<center><img src="./UniSyn_files/architecture.jpg"></center>
 <br><br>
 
-<h2>1. Examples of training data<a name="visual"></a></h2>
+<h2>1. Examples of training data<a name="data"></a></h2>
 <blockquote>
 <ul>
 	A singing corpus and a speech corpus are involved to train UniSyn. The singing corpus contains two singers, denoted as 'Singer-1' and 'Singer-2',  with only singing data. The speech corpus contains two speakers, denoted as 'Speaker-1' and 'Speaker-2', with only speech recordings. Here, we list a few examples from the training corpora to provide the target speaker/singer timbre for listeners.
@@ -117,7 +117,7 @@
 
 <br><br>
 
-<h2>2. Demos - Synthetic samples display<a name="long"></a></h2>
+<h2>2. Demos - Synthetic samples display<a name="display"></a></h2>
 
 <table>
   <thead>
@@ -223,7 +223,7 @@ Compared models:
 
     <tr>
       <td style="text-align: center" rowspan="4"><strong>Singer-2</strong></td>
-      <td style="text-align: left" rowspan="4"><audio style="width: 140px;" src="samples/gt/Singer2-1.wav" controls="" preload=""></audio></td>
+      <td style="text-align: left" rowspan="4"><audio style="width: 140px;" src="samples/gt/singer2-1.wav" controls="" preload=""></audio></td>
       <td style="text-align: center"> \ </td>
 	  <td style="text-align: left" ><audio style="width: 140px;" src="samples/tts/vits-unify/mydb1_003185_31.wav" controls="" preload=""></audio></td> 
       <td style="text-align: center"> \ </td>
@@ -515,7 +515,7 @@ Compared models:
 
 
 
-<h2>5. Demos -- Ablation studies<a name="Ablation"></a></h2>
+<h2>5. Demos -- Ablation studies<a name="ablation"></a></h2>
 
 <p><b>We conduct ablation studies to evaluate the proposed components in UniSyn, where ``-pert" and ``-GVAE" denote removing speaker timbre perturbation and supervised guided-VAE from the proposed method respectively.</b></p>
 
