@@ -28,22 +28,23 @@
 
     <center> Yi Lei<sup>1</sup>, Shan Yang<sup>2</sup>, Xinsheng Wang<sup>1</sup>, Qicong Xie<sup>1</sup>, Jixun Yao<sup>1</sup>, Lei Xie<sup>1</sup>, Dan Su<sup>2</sup> </center>
     <center> <sup>1</sup> Audio, Speech and Language Processing Group (ASLP@NPU), School of Computer Science, Northwestern Polytechnical University, Xi'an, China</center>
+    <center><a href="http://www.npu-aslp.org">http://www.npu-aslp.org</a></center>
     <center> <sup>2</sup> Tencent AI Lab, China</center>
 
 <h2>Contents</h2>
 <ul>
   <li><a href="https://leiyi420.github.io/UniSyn/#abstract">Abstract</a></li>
   <li><a href="https://leiyi420.github.io/UniSyn/#data">Examples of training data</a></li>
-  <li><a href="https://leiyi420.github.io/UniSyn/#display">Demos - Synthetic samples display</a></li>
-  <li><a href="https://leiyi420.github.io/UniSyn/#tts">Demos -- TTS of unified modeling for speakers and singers</a></li>
+  <li><a href="https://leiyi420.github.io/UniSyn/#display">Demos - Synthetic samples by UniSyn</a></li>
+  <li><a href="https://leiyi420.github.io/UniSyn/#tts">Demos -- Comparison of various unified models on TTS for speakers and singers</a></li>
     <ul>
-        <li><a href="https://leiyi420.github.io/UniSyn/#3.1">TTS of singers, who only have singing training data</a></li>
-        <li><a href="https://leiyi420.github.io/UniSyn/#3.2">TTS of speakers</a></li>
+        <li><a href="https://leiyi420.github.io/UniSyn/#3.1">TTS of target singers, who only have singing training data</a></li>
+        <li><a href="https://leiyi420.github.io/UniSyn/#3.2">TTS of target speakers</a></li>
     </ul>
-  <li><a href="https://leiyi420.github.io/UniSyn/#svs">Demos -- SVS in unified modeling for speakers and singers</a></li>
+  <li><a href="https://leiyi420.github.io/UniSyn/#svs">Demos -- Comparison of various unified models on SVS for speakers and singers</a></li>
     <ul>
-        <li><a href="https://leiyi420.github.io/UniSyn/#4.1">SVS of speakers, who only have speech training data</a></li>
-        <li><a href="https://leiyi420.github.io/UniSyn/#4.2">SVS of singers</a></li>
+        <li><a href="https://leiyi420.github.io/UniSyn/#4.1">SVS of target speakers, who only have speech training data</a></li>
+        <li><a href="https://leiyi420.github.io/UniSyn/#4.2">SVS of target singers</a></li>
     </ul>
   <li><a href="https://leiyi420.github.io/UniSyn/#ablation">Demos -- Ablation studies</a></li>
 </ul>
@@ -117,7 +118,7 @@
 
 <br><br>
 
-<h2>2. Demos - Synthetic samples display<a name="display"></a></h2>
+<h2>2. Demos - Synthetic samples by UniSyn<a name="display"></a></h2>
 
 <table>
   <thead>
@@ -166,8 +167,8 @@
 </table>
 <br><br>
 
-<h2>3. Demos -- TTS of unified modeling for speakers and singers.<a name="tts"></a></h2>
-<p><b>We compare the synthetic speaking voices of target speakers and singers from different systems.</b></p>
+<h2>3. Demos -- Comparison of various unified models on TTS for speakers and singers.<a name="tts"></a></h2>
+<p><b>We compare the synthetic speech of target speakers and singers generated from different systems.</b></p>
 <blockquote>
 Compared models:
 <ul>
@@ -180,7 +181,7 @@ Compared models:
 </blockquote>
 <br>
 
-<a name="3.1"><h3>3.1 Synthetic speaking voices of singers, who only have singing training data.</h3></a>
+<a name="3.1"><h3>3.1 Synthetic speech of target singers, who only have singing training data.</h3></a>
 
 <table>
   <thead>
@@ -253,7 +254,7 @@ Compared models:
 <p><b>Short summary:</b> The synthetic speech voices show the superiority of the proposed method in producing synthetic speaking voice of the target singer without speech training data.</p>
 <br>
 
-<a name="3.2"><h3>3.2 Synthetic speaking voices of speakers.</h3></a>
+<a name="3.2"><h3>3.2 Synthetic speech of target speakers.</h3></a>
 <br>
 <table>
   <thead>
@@ -327,7 +328,7 @@ Compared models:
 <p><b>Short summary:</b> The results demonstrate that the proposed UniSyn with interpretable latent distribution has the equivalent ability in speech generation with VITS.</p>
 <br>
 
-<h2>4. Demos -- SVS in unified modeling for speakers and singers.<a name="svs"></a></h2>
+<h2>4. Demos -- Comparison of various unified models on SVS for speakers and singers.<a name="svs"></a></h2>
 
 <p><b>We compare the synthetic singing voices of target speakers and singers from different systems.</b></p>
 <blockquote>
@@ -343,7 +344,7 @@ Compared models:
 </blockquote>
 <br>
 
-<a name="4.1"><h3>4.1 Synthetic singing voices of speakers, who only have speaking training data.</h3></a>
+<a name="4.1"><h3>4.1 Synthetic singing voices of target speakers, who only have speaking training data.</h3></a>
 
 <table>
   <thead>
@@ -427,7 +428,7 @@ Compared models:
 <p><b>Short summary:</b> The results demonstrate the effectiveness of the proposed model in generating natural singing voices of speakers, who don't have singing training data, with preserving the target timbre.>
 <br>
 
-<a name="4.2"><h3>4.2 Synthetic singing voices of singers.</h3></a>
+<a name="4.2"><h3>4.2 Synthetic singing voices of target singers.</h3></a>
 
 
 <table>
